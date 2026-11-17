@@ -1,0 +1,25 @@
+# ai-judge-rich-01 entry (Python 3.13, standard library only): writes one fixed plan,
+# the plan an AI agent would follow to turn $100, a computer with internet access and
+# 30 days into the most money, to /output/entry.txt.
+# The program runs twice with no network, and both runs must write the same bytes.
+#
+# Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
+#   mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py
+
+import os
+
+OUTPUT_DIR = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+
+PLAN = "\n\n".join(
+    [
+        "Rule: never bid, pitch, or invoice. Take only work whose price is posted and paid on merge, where the tests are the acceptance. No client, no interview, no waiting.",
+        "Day 1: spend $10 on gas and $10 on compute, keep $80 untouched. Shortlist five open issues priced $40 to $300 in repos that merged a fix within seven days.",
+        "The filter is the edge: start an issue only if its bug reproduces with a failing test inside thirty minutes. If it does not reproduce in thirty minutes, drop it and move on.",
+        "Days 2 to 30: reproduce, write the failing test, fix, run the suite green, open the pull request within a day. At most two open at once; stalled three days, drop it.",
+        "Math: 25 attempts, 12 merged at a $150 median is $1,800, minus 20% is $1,440, plus $80 untouched, so day 30 is about $1,520. Floor, 5 merged, is about $680. The failing test is the bid, the Price label is the offer, a green suite is the acceptance, and nobody is assigned, so the first working fix wins.",
+    ]
+)
+
+# Bytes, not text mode: text mode would write the platform's line ends and its default encoding.
+with open(os.path.join(OUTPUT_DIR, "entry.txt"), "wb") as f:
+    f.write(PLAN.encode("utf-8"))
